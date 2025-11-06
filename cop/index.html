@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Créer un compte</h1>
+    <form id="registerForm">
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="password" placeholder="Mot de passe" required><br>
+        <input type="password" id="confirmPassword" placeholder="Confirmez le mot de passe" required><br>
+        <button type="submit">S'inscrire</button>
+    </form>
+    <p id="message"></p>
+    <a href="login.html">Déjà inscrit ? Se connecter</a>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                document.getElementById('message').textContent = "Les mots de passe ne correspondent pas.";
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            if (users.find(u => u.email === email)) {
+                document.getElementById('message').textContent = "Cet email est déjà utilisé.";
+                return;
+            }
+
+            users.push({ email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            document.getElementById('message').textContent = "Compte créé avec succès !";
+            document.getElementById('registerForm').reset();
+        });
+    </script>
+</body>
+</html>
